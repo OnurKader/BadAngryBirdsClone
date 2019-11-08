@@ -26,6 +26,12 @@ class ViewController: UIViewController {
         dynamic_animator.addBehavior(gravity_behavior);
     }
 
+    override var shouldAutorotate: Bool {
+        return true
+    }
 
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .landscapeLeft
+    }
 }
 

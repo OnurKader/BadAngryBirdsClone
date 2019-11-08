@@ -38,7 +38,7 @@
 		ECE0F3042375C8E200056E51 /* balloon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ECE0F2C42375C8DF00056E51 /* balloon.jpg */; };
 		ECE0F3052375C8E200056E51 /* replay.png in Resources */ = {isa = PBXBuildFile; fileRef = ECE0F2C52375C8DF00056E51 /* replay.png */; };
 		ECE0F30F2375C8E200056E51 /* plate_white.png in Resources */ = {isa = PBXBuildFile; fileRef = ECE0F2CF2375C8E200056E51 /* plate_white.png */; };
-		ECE0F3112375CF0C00056E51 /* DragImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE0F3102375CF0C00056E51 /* DragImageView.swift */; };
+		ECE0F3132375D40400056E51 /* dragImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE0F3122375D40400056E51 /* dragImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,7 +96,7 @@
 		ECE0F2C42375C8DF00056E51 /* balloon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = balloon.jpg; path = ../../../Downloads/images/balloon.jpg; sourceTree = "<group>"; };
 		ECE0F2C52375C8DF00056E51 /* replay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = replay.png; path = ../../../Downloads/images/replay.png; sourceTree = "<group>"; };
 		ECE0F2CF2375C8E200056E51 /* plate_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = plate_white.png; path = ../../../Downloads/images/plate_white.png; sourceTree = "<group>"; };
-		ECE0F3102375CF0C00056E51 /* DragImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragImageView.swift; sourceTree = "<group>"; };
+		ECE0F3122375D40400056E51 /* dragImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dragImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,7 +174,7 @@
 				ECE0F2B72375C8DD00056E51 /* sun.jpg */,
 				ECE0F2A82375C8DA00056E51 /* thumbs_up.png */,
 				ECE0F2662375C88400056E51 /* Main.storyboard */,
-				ECE0F3102375CF0C00056E51 /* DragImageView.swift */,
+				ECE0F3122375D40400056E51 /* dragImageView.swift */,
 				ECE0F2692375C88500056E51 /* Assets.xcassets */,
 				ECE0F26B2375C88500056E51 /* LaunchScreen.storyboard */,
 				ECE0F26E2375C88500056E51 /* Info.plist */,
@@ -356,7 +356,7 @@
 			files = (
 				ECE0F2652375C88400056E51 /* ViewController.swift in Sources */,
 				ECE0F2612375C88400056E51 /* AppDelegate.swift in Sources */,
-				ECE0F3112375CF0C00056E51 /* DragImageView.swift in Sources */,
+				ECE0F3132375D40400056E51 /* dragImageView.swift in Sources */,
 				ECE0F2632375C88400056E51 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

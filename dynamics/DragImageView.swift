@@ -10,10 +10,20 @@ import UIKit
 
 class dragImageView: UIImageView {
 
-   var startLocation: CGPoint?
-      
+    var my_delegate: SubviewDelegate?;
+    
+    var startLocation: CGPoint?;
+    var max_width: CGFloat?;
+    var min_width: CGFloat?;
+    var max_height: CGFloat?;
+    var min_height: CGFloat?;
+
       override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-          startLocation = touches.first?.location(in: self)
+        startLocation = touches.first?.location(in: self);
+        max_width = self.superview!.bounds.width * 0.185;
+        min_width = self.bounds.midX;
+        max_height = self.superview!.bounds.height * 0.25 + self.bounds.midY;
+        min_height = self.superview!.bounds.height * 0.75 - self.bounds.midY;
       }
       
       
@@ -24,18 +34,17 @@ class dragImageView: UIImageView {
         let dy = currentLocation!.y - startLocation!.y;
         var newCenter = CGPoint(x: self.center.x+dx, y: self.center.y+dy);
 
-        let halfx = self.bounds.midX;
-        newCenter.x = max(halfx, newCenter.x);
-        newCenter.x = min(self.superview!.bounds.width * 0.185, newCenter.x);
+        newCenter.x = max(min_width!, newCenter.x);
+        newCenter.x = min(max_width!, newCenter.x);
           
-        let halfy = self.bounds.midY;
-        newCenter.y = max(self.superview!.bounds.height * 0.25 + halfy, newCenter.y);
-        newCenter.y = min(self.superview!.bounds.height * 0.75 - halfy, newCenter.y);
+        newCenter.y = max(max_height!, newCenter.y);
+        newCenter.y = min(min_height!, newCenter.y);
           
         self.center = newCenter;
       }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.center = CGPoint(x: 108 + 32, y: self.superview!.bounds.height/2);
+        self.my_delegate?.spawnBall(x: self.center.x, y: self.center.y, vx: (140 - self.center.x), vy: (self.superview!.bounds.height/2 - self.center.y));
+        self.center = CGPoint(x: 140, y: self.superview!.bounds.height/2);
     }
 }

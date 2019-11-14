@@ -20,7 +20,7 @@ class dragImageView: UIImageView {
 
       override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         startLocation = touches.first?.location(in: self);
-        max_width = self.superview!.bounds.width * 0.185;
+        max_width = self.bounds.midX * 6;
         min_width = self.bounds.midX;
         max_height = self.superview!.bounds.height * 0.25 + self.bounds.midY;
         min_height = self.superview!.bounds.height * 0.75 - self.bounds.midY;
@@ -44,7 +44,7 @@ class dragImageView: UIImageView {
       }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.my_delegate?.spawnBall(x: self.center.x, y: self.center.y, vx: (140 - self.center.x), vy: (self.superview!.bounds.height/2 - self.center.y));
-        self.center = CGPoint(x: 140, y: self.superview!.bounds.height/2);
+        self.my_delegate?.spawnBall(x: self.center.x, y: self.center.y, vx: (min_width! * 3 - self.center.x), vy: (self.superview!.bounds.height / 2 - self.center.y));
+        self.center = CGPoint(x: min_width! * 3, y: self.superview!.bounds.height/2);
     }
 }

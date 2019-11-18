@@ -25,22 +25,21 @@ class ViewController: UIViewController, SubviewDelegate {
         gravity_behavior.addItem(ball_view);
         collision_behavior.addItem(ball_view);
         dynamic_item_behavior.addItem(ball_view);
-        
-        dynamic_item_behavior.addLinearVelocity(CGPoint(x: vx * 8.1, y: vy * 9.32 - 25), for: ball_view);
+
+        dynamic_item_behavior.addLinearVelocity(CGPoint(x: vx * 15, y: vy * 10 - 32), for: ball_view);
     }
 
     func updateBehaviors(){
+        dynamic_animator = UIDynamicAnimator(referenceView: self.view);
         dynamic_item_behavior = UIDynamicItemBehavior(items: []);
         collision_behavior = UICollisionBehavior(items: []);
-        collision_behavior.translatesReferenceBoundsIntoBoundary = false;
         gravity_behavior = UIGravityBehavior(items: []);
-        
+
         // Add Custom Boundaries
         collision_behavior.addBoundary(withIdentifier: "leftBoundary" as NSCopying, from: CGPoint(x: 0, y: 0), to: CGPoint(x: 0, y: UIScreen.main.bounds.height));
         collision_behavior.addBoundary(withIdentifier: "topBoundary" as NSCopying, from: CGPoint(x: 0, y: 0), to: CGPoint(x: UIScreen.main.bounds.width, y: 0));
-        collision_behavior.addBoundary(withIdentifier: "bottomBoundary" as NSCopying, from: CGPoint(x: 0, y: UIScreen.main.bounds.height), to: CGPoint(x: UIScreen.main.bounds.width, y: UIScreen.main.bounds.height));
+        // collision_behavior.addBoundary(withIdentifier: "bottomBoundary" as NSCopying, from: CGPoint(x: 0, y: UIScreen.main.bounds.height), to: CGPoint(x: UIScreen.main.bounds.width, y: UIScreen.main.bounds.height));
 
-        
         dynamic_animator.addBehavior(gravity_behavior);
         dynamic_animator.addBehavior(dynamic_item_behavior);
         dynamic_animator.addBehavior(collision_behavior);
@@ -56,9 +55,7 @@ class ViewController: UIViewController, SubviewDelegate {
         
         let value = UIInterfaceOrientation.landscapeLeft.rawValue;
         UIDevice.current.setValue(value, forKey: "orientation");
-        
-        dynamic_animator = UIDynamicAnimator(referenceView: self.view);
-        
+
         updateBehaviors();
     }
 

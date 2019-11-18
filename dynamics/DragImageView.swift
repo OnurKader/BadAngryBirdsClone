@@ -42,7 +42,7 @@ class dragImageView: UIImageView {
           
         self.center = newCenter;
       }
-    
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.my_delegate?.spawnBall(x: self.center.x, y: self.center.y, vx: (min_width! * 3 - self.center.x), vy: (self.superview!.bounds.height / 2 - self.center.y));
         self.center = CGPoint(x: min_width! * 3, y: self.superview!.bounds.height/2);

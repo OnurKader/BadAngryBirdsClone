@@ -10,6 +10,7 @@
 		EC29EF242382CF5F005B0729 /* ball.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EC29EF222382CF5F005B0729 /* ball.jpg */; };
 		EC29EF252382CF5F005B0729 /* sun.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EC29EF232382CF5F005B0729 /* sun.jpg */; };
 		EC29EF2B2382D987005B0729 /* menuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC29EF2A2382D987005B0729 /* menuController.swift */; };
+		EC29EF2D2382DC18005B0729 /* cat-bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EC29EF2C2382DC18005B0729 /* cat-bg.jpg */; };
 		ECE0F2612375C88400056E51 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE0F2602375C88400056E51 /* AppDelegate.swift */; };
 		ECE0F2632375C88400056E51 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE0F2622375C88400056E51 /* SceneDelegate.swift */; };
 		ECE0F2652375C88400056E51 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE0F2642375C88400056E51 /* ViewController.swift */; };
@@ -42,6 +43,7 @@
 		EC29EF222382CF5F005B0729 /* ball.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ball.jpg; sourceTree = "<group>"; };
 		EC29EF232382CF5F005B0729 /* sun.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sun.jpg; sourceTree = "<group>"; };
 		EC29EF2A2382D987005B0729 /* menuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = menuController.swift; sourceTree = "<group>"; };
+		EC29EF2C2382DC18005B0729 /* cat-bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "cat-bg.jpg"; sourceTree = "<group>"; };
 		ECE0F25D2375C88400056E51 /* dynamics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dynamics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECE0F2602375C88400056E51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ECE0F2622375C88400056E51 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,15 +111,16 @@
 			children = (
 				ECE0F2602375C88400056E51 /* AppDelegate.swift */,
 				ECE0F2622375C88400056E51 /* SceneDelegate.swift */,
-				ECE0F2642375C88400056E51 /* ViewController.swift */,
 				ECE0F3122375D40400056E51 /* dragImageView.swift */,
+				ECE0F2642375C88400056E51 /* ViewController.swift */,
+				EC29EF2A2382D987005B0729 /* menuController.swift */,
 				ECE0F2662375C88400056E51 /* Main.storyboard */,
 				EC29EF222382CF5F005B0729 /* ball.jpg */,
+				EC29EF2C2382DC18005B0729 /* cat-bg.jpg */,
 				EC29EF232382CF5F005B0729 /* sun.jpg */,
 				ECE0F2692375C88500056E51 /* Assets.xcassets */,
 				ECE0F26B2375C88500056E51 /* LaunchScreen.storyboard */,
 				ECE0F26E2375C88500056E51 /* Info.plist */,
-				EC29EF2A2382D987005B0729 /* menuController.swift */,
 			);
 			path = dynamics;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECE0F26D2375C88500056E51 /* LaunchScreen.storyboard in Resources */,
+				EC29EF2D2382DC18005B0729 /* cat-bg.jpg in Resources */,
 				ECE0F26A2375C88500056E51 /* Assets.xcassets in Resources */,
 				EC29EF252382CF5F005B0729 /* sun.jpg in Resources */,
 				EC29EF242382CF5F005B0729 /* ball.jpg in Resources */,

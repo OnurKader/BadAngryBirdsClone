@@ -5,16 +5,16 @@ protocol SubviewDelegate{
 }
 
 class ViewController: UIViewController, SubviewDelegate {
-    
+
     @IBOutlet weak var shooter: dragImageView!;
 
     var dynamic_animator: UIDynamicAnimator!;
     var dynamic_item_behavior: UIDynamicItemBehavior!;
     var gravity_behavior: UIGravityBehavior!;
     var collision_behavior: UICollisionBehavior!;
-    
+
     var screen_size : CGRect!;
-        
+
     func spawnBall(x: CGFloat, y: CGFloat, vx: CGFloat, vy: CGFloat)
     {
         let ball = UIImage(named: "ball.jpg");

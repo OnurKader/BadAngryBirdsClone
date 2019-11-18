@@ -25,8 +25,8 @@ class dragImageView: UIImageView {
         max_height = self.superview!.bounds.height * 0.25 + self.bounds.midY;
         min_height = self.superview!.bounds.height * 0.75 - self.bounds.midY;
       }
-      
-      
+
+
       override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let currentLocation = touches.first?.location(in: self);
           

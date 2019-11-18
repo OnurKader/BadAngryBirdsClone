@@ -14,7 +14,7 @@ class menuController: UIViewController {
         performSegue(withIdentifier: "playGame", sender: self);
     }
     
-    func assignbackground(){
+    func assignBackground(){
         let background = UIImage(named: "cat-bg.jpg");
 
         var imageView : UIImageView!;
@@ -29,7 +29,7 @@ class menuController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        assignbackground();
+        assignBackground();
 
         // Do any additional setup after loading the view.
     }

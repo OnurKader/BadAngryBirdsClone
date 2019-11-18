@@ -26,7 +26,7 @@ class ViewController: UIViewController, SubviewDelegate {
         collision_behavior.addItem(ball_view);
         dynamic_item_behavior.addItem(ball_view);
 
-        dynamic_item_behavior.addLinearVelocity(CGPoint(x: vx * 15, y: vy * 10 - 32), for: ball_view);
+        dynamic_item_behavior.addLinearVelocity(CGPoint(x: vx * 15 - 20, y: vy * 10 - 42), for: ball_view);
     }
 
     func updateBehaviors(){

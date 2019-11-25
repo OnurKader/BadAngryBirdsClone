@@ -17,7 +17,7 @@ class ViewController: UIViewController, SubviewDelegate {
     
     var ball_array: [UIImageView]! = [];
     var bird_array: [UIImageView]! = [];
-    
+
     var bird_slots: [CGFloat]! = [];
 
     let total_bird_count = 5;
@@ -34,7 +34,7 @@ class ViewController: UIViewController, SubviewDelegate {
         gravity_behavior.addItem(ball_view);
         collision_behavior.addItem(ball_view);
         dynamic_item_behavior.addItem(ball_view);
-        dynamic_item_behavior.addLinearVelocity(CGPoint(x: vx * 15.15 - 20, y: vy * 10 - 50), for: ball_view);
+        dynamic_item_behavior.addLinearVelocity(CGPoint(x: vx * 15.2 + 20, y: vy * 10 - 50), for: ball_view);
     }
 
     func updateBehaviors(){
@@ -67,27 +67,29 @@ class ViewController: UIViewController, SubviewDelegate {
             }
         }
     }
-    
+
     func initBirdPos()
     {
         let height = screen_size.maxY;
         let start_y_off: CGFloat = height * 0.05;
 
-        for i in 0...5 {
-            // 65 === bird_image.height
-            bird_slots.append(start_y_off + CGFloat(i * 65) + 5);
+        for i in 0...4 {
+            // 65 === bird_image.height, +13 for the extra gap
+            bird_slots.append(start_y_off + CGFloat(i * 78));
         }
     }
 
-    var bird_index = 0;
+    // TODO Find a way to reset the arrays, to spawn new birds when one dies
+    var bird_count = 0;
+    var indices: [Int]! = [0, 1, 2, 3, 4].shuffled();
     @objc func spawnBirds()
     {
-        if bird_index < total_bird_count {
+        if bird_count < total_bird_count {
             let bird = UIImage(named: "heron.png");
             let bird_view = UIImageView(image: bird);
 
-            bird_view.frame = CGRect(x: screen_size.maxX * 0.9 - bird!.size.width, y: bird_slots![bird_index], width: 48, height: 65);
-            bird_index += 1;
+            bird_view.frame = CGRect(x: screen_size.maxX * 0.9 - bird!.size.width, y: bird_slots![indices.removeLast()], width: 48, height: 65);
+            bird_count += 1;
 
             view.addSubview(bird_view);
             bird_array.append(bird_view);
@@ -109,10 +111,10 @@ class ViewController: UIViewController, SubviewDelegate {
         updateBehaviors();
 
         // Schedule update() to be called every second to not be intensive, could drop down to 20ms for 50 fps.
-        let update_timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(ballEdge), userInfo: nil, repeats: true);
+        let ball_timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(ballEdge), userInfo: nil, repeats: true);
 
         // Bird Spawner
-        let bird_timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(spawnBirds), userInfo: nil, repeats: true);
+        let bird_timer = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(spawnBirds), userInfo: nil, repeats: true);
     }
 
     override var shouldAutorotate: Bool {

@@ -16,6 +16,11 @@ class ViewController: UIViewController, SubviewDelegate {
     var screen_size : CGRect!;
     
     var ball_array: [UIImageView]! = [];
+    var bird_array: [UIImageView]! = [];
+    
+    var bird_slots: [CGFloat]! = [];
+
+    let total_bird_count = 5;
 
     func spawnBall(x: CGFloat, y: CGFloat, vx: CGFloat, vy: CGFloat)
     {
@@ -23,7 +28,7 @@ class ViewController: UIViewController, SubviewDelegate {
         let ball_view = UIImageView(image: ball!);
         ball_view.frame = CGRect(x: x, y: y, width: 32, height: 32);
         view.addSubview(ball_view);
-        
+
         ball_array.append(ball_view);
 
         gravity_behavior.addItem(ball_view);
@@ -48,7 +53,7 @@ class ViewController: UIViewController, SubviewDelegate {
         dynamic_animator.addBehavior(collision_behavior);
     }
 
-    @objc func update()
+    @objc func ballEdge()
     {
         for ball in ball_array
         {
@@ -63,9 +68,30 @@ class ViewController: UIViewController, SubviewDelegate {
         }
     }
     
-    func spawnBirds()
+    func initBirdPos()
     {
-        
+        let height = screen_size.maxY;
+        let start_y_off: CGFloat = height * 0.05;
+
+        for i in 0...5 {
+            // 65 === bird_image.height
+            bird_slots.append(start_y_off + CGFloat(i * 65) + 5);
+        }
+    }
+
+    var bird_index = 0;
+    @objc func spawnBirds()
+    {
+        if bird_index < total_bird_count {
+            let bird = UIImage(named: "heron.png");
+            let bird_view = UIImageView(image: bird);
+
+            bird_view.frame = CGRect(x: screen_size.maxX * 0.9 - bird!.size.width, y: bird_slots![bird_index], width: 48, height: 65);
+            bird_index += 1;
+
+            view.addSubview(bird_view);
+            bird_array.append(bird_view);
+        }
     }
 
     override func viewDidLoad() {
@@ -79,10 +105,14 @@ class ViewController: UIViewController, SubviewDelegate {
         let value = UIInterfaceOrientation.landscapeLeft.rawValue;
         UIDevice.current.setValue(value, forKey: "orientation");
 
+        initBirdPos();
         updateBehaviors();
 
         // Schedule update() to be called every second to not be intensive, could drop down to 20ms for 50 fps.
-        _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(update), userInfo: nil, repeats: true);
+        let update_timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(ballEdge), userInfo: nil, repeats: true);
+
+        // Bird Spawner
+        let bird_timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(spawnBirds), userInfo: nil, repeats: true);
     }
 
     override var shouldAutorotate: Bool {
@@ -93,4 +123,3 @@ class ViewController: UIViewController, SubviewDelegate {
         return .landscapeLeft;
     }
 }
-

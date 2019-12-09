@@ -14,12 +14,15 @@ class ViewController: UIViewController, SubviewDelegate {
     var collision_behavior: UICollisionBehavior!;
 
     var screen_size : CGRect!;
-    
+
     var ball_array: [UIImageView]! = [];
     var bird_array: [UIImageView]! = [];
 
     var bird_slots: [CGFloat]! = [];
 
+    // UICollisionBehaviorDelegate TODO 
+    
+    // Get from screen size. Height / 78
     let total_bird_count = 5;
 
     func spawnBall(x: CGFloat, y: CGFloat, vx: CGFloat, vy: CGFloat)
@@ -37,6 +40,13 @@ class ViewController: UIViewController, SubviewDelegate {
         dynamic_item_behavior.addLinearVelocity(CGPoint(x: vx * 15.2 + 20, y: vy * 10 - 50), for: ball_view);
     }
 
+    var i = 0;
+    func temp() -> Void {
+        print("Yep Action", i);
+        // Check for bird - ball collision and remove the bird and the ball
+        i += 1;
+    }
+
     func updateBehaviors(){
         dynamic_animator = UIDynamicAnimator(referenceView: self.view);
         dynamic_item_behavior = UIDynamicItemBehavior(items: []);
@@ -46,11 +56,25 @@ class ViewController: UIViewController, SubviewDelegate {
         // Add Custom Boundaries
         collision_behavior.addBoundary(withIdentifier: "leftBoundary" as NSCopying, from: CGPoint(x: 0, y: 0), to: CGPoint(x: 0, y: UIScreen.main.bounds.height));
         collision_behavior.addBoundary(withIdentifier: "topBoundary" as NSCopying, from: CGPoint(x: 0, y: 0), to: CGPoint(x: UIScreen.main.bounds.width, y: 0));
-        // collision_behavior.addBoundary(withIdentifier: "bottomBoundary" as NSCopying, from: CGPoint(x: 0, y: UIScreen.main.bounds.height), to: CGPoint(x: UIScreen.main.bounds.width, y: UIScreen.main.bounds.height));
+        collision_behavior.addBoundary(withIdentifier: "bottomBoundary" as NSCopying, from: CGPoint(x: 0, y: UIScreen.main.bounds.height), to: CGPoint(x: UIScreen.main.bounds.width, y: UIScreen.main.bounds.height));
 
+        collision_behavior.action = temp;
+        dynamic_item_behavior.friction = 0.01;
+        dynamic_item_behavior.elasticity = 0.85;
+        
         dynamic_animator.addBehavior(gravity_behavior);
         dynamic_animator.addBehavior(dynamic_item_behavior);
         dynamic_animator.addBehavior(collision_behavior);
+    }
+
+    func removeBall(ball: UIImageView)
+    {
+        dynamic_item_behavior.removeItem(ball);
+        gravity_behavior.removeItem(ball);
+        collision_behavior.removeItem(ball);
+        if let idx = ball_array.firstIndex(of: ball) {
+           ball_array.remove(at: idx);
+       }
     }
 
     @objc func ballEdge()
@@ -60,10 +84,7 @@ class ViewController: UIViewController, SubviewDelegate {
             // If ball is out of view frame, erase it from the dynamicItemBeh and array.
             // But not delete the var itself, I don't know how, maybe the thing in the array is a pointer
             if ((ball.frame.minX > screen_size!.maxX) || (ball.frame.minY > screen_size!.maxY)) {
-                dynamic_item_behavior.removeItem(ball);
-                if let idx = ball_array.firstIndex(of: ball) {
-                    ball_array.remove(at: idx);
-                }
+                removeBall(ball: ball);
             }
         }
     }
@@ -81,18 +102,20 @@ class ViewController: UIViewController, SubviewDelegate {
 
     // TODO Find a way to reset the arrays, to spawn new birds when one dies
     var bird_count = 0;
-    var indices: [Int]! = [0, 1, 2, 3, 4].shuffled();
+    var indices: [Int]! = Array(0...4).shuffled();
     @objc func spawnBirds()
     {
         if bird_count < total_bird_count {
             let bird = UIImage(named: "heron.png");
             let bird_view = UIImageView(image: bird);
 
-            bird_view.frame = CGRect(x: screen_size.maxX * 0.9 - bird!.size.width, y: bird_slots![indices.removeLast()], width: 48, height: 65);
+            let last : Int = indices.removeLast();
+            bird_view.frame = CGRect(x: screen_size.maxX * 0.9 - bird!.size.width, y: bird_slots![last], width: 48, height: 65);
             bird_count += 1;
 
             view.addSubview(bird_view);
             bird_array.append(bird_view);
+            collision_behavior.addItem(bird_view);
         }
     }
 
@@ -115,6 +138,8 @@ class ViewController: UIViewController, SubviewDelegate {
 
         // Bird Spawner
         let bird_timer = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(spawnBirds), userInfo: nil, repeats: true);
+    
+        // TODO Add a 20 second timer that stops the game and shows the end screen
     }
 
     override var shouldAutorotate: Bool {

@@ -29,7 +29,7 @@ class dragImageView: UIImageView {
 
       override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let currentLocation = touches.first?.location(in: self);
-          
+
         let dx = currentLocation!.x - startLocation!.x;
         let dy = currentLocation!.y - startLocation!.y;
         var newCenter = CGPoint(x: self.center.x+dx, y: self.center.y+dy);

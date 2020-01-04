@@ -19,10 +19,11 @@ class ViewController: UIViewController, SubviewDelegate {
     var bird_array: [UIImageView]! = [];
 
     var bird_slots: [CGFloat]! = [];
+    var last_ball: UIImageView!;
 
     // UICollisionBehaviorDelegate TODO 
-    
-    // Get from screen size. Height / 78
+
+    // TODO Get from screen size. Height / 78
     let total_bird_count = 5;
 
     func spawnBall(x: CGFloat, y: CGFloat, vx: CGFloat, vy: CGFloat)
@@ -31,7 +32,7 @@ class ViewController: UIViewController, SubviewDelegate {
         let ball_view = UIImageView(image: ball!);
         ball_view.frame = CGRect(x: x, y: y, width: 32, height: 32);
         view.addSubview(ball_view);
-
+        last_ball = ball_view;
         ball_array.append(ball_view);
 
         gravity_behavior.addItem(ball_view);
@@ -40,11 +41,18 @@ class ViewController: UIViewController, SubviewDelegate {
         dynamic_item_behavior.addLinearVelocity(CGPoint(x: vx * 15.2 + 20, y: vy * 10 - 50), for: ball_view);
     }
 
-    var i = 0;
     func temp() -> Void {
-        print("Yep Action", i);
-        // Check for bird - ball collision and remove the bird and the ball
-        i += 1;
+        for (bird) in bird_array {
+            if last_ball !== nil {
+                if last_ball.frame.intersects(bird.frame) {
+                    collision_behavior.removeItem(bird);
+                    bird.removeFromSuperview();
+                    bird.frame = CGRect(x: -1337, y: -8008, width: 48, height: 65);
+                    // bird_count -= 1;
+                    print(bird_array.firstIndex(of: bird));
+                }
+            }
+        }
     }
 
     func updateBehaviors(){
@@ -60,7 +68,6 @@ class ViewController: UIViewController, SubviewDelegate {
 
         collision_behavior.action = temp;
         dynamic_item_behavior.friction = 0.01;
-        dynamic_item_behavior.elasticity = 0.85;
         
         dynamic_animator.addBehavior(gravity_behavior);
         dynamic_animator.addBehavior(dynamic_item_behavior);
@@ -115,7 +122,6 @@ class ViewController: UIViewController, SubviewDelegate {
 
             view.addSubview(bird_view);
             bird_array.append(bird_view);
-            collision_behavior.addItem(bird_view);
         }
     }
 

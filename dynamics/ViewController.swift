@@ -22,8 +22,10 @@ class ViewController: UIViewController, SubviewDelegate {
 
     var bird_slots: [CGFloat]! = [];
     var score: UInt16 = 0;
-    var time_limit: UInt8 = 20;
+    var time_limit: UInt8 = 5;
     var time_over: Bool = false;
+    
+    let pass_score: UInt8 = 10;
 
     // TODO Get from screen size. Height / 78
     let total_bird_count = 5;
@@ -110,6 +112,7 @@ class ViewController: UIViewController, SubviewDelegate {
         dynamic_item_behavior.removeItem(ball);
         gravity_behavior.removeItem(ball);
         collision_behavior.removeItem(ball);
+        ball.removeFromSuperview();
         if let idx = ball_array.firstIndex(of: ball) {
            ball_array.remove(at: idx);
        }
@@ -167,26 +170,43 @@ class ViewController: UIViewController, SubviewDelegate {
             }
         }
     }
-    
+
+    func getRGB(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor
+    {
+        return UIColor(red: red / 255.0, green: green / 255.0, blue: blue / 255.0, alpha: 1.0);
+    }
+
+    func go_menu()
+    {
+        let game_over = UILabel(frame: CGRect(x: 0, y: 0, width: 256, height: 36));
+        game_over.center = CGPoint(x: screen_size.midX, y: screen_size.maxY * 0.2718281828);
+        game_over.textAlignment = NSTextAlignment.center;
+        game_over.text = "Game Over";
+        game_over.textColor = UIColor.black;
+        game_over.font = UIFont.boldSystemFont(ofSize: 42);
+        let go_score = UILabel(frame: CGRect(x: 0, y: 0, width: 256, height: 24));
+        go_score.center = CGPoint(x: screen_size.midX, y: screen_size.maxY * 0.2718281828 + 54);
+        go_score.textAlignment = NSTextAlignment.center;
+        go_score.text = "Your Score: " + String(score);
+        go_score.textColor = getRGB(red: 18, green: 156, blue: 36);
+        go_score.font = UIFont.boldSystemFont(ofSize: 25);
+        hideAllSubviews();
+        self.view.addSubview(game_over);
+        self.view.addSubview(go_score);
+    }
+
     func gameOver()
     {
-        if(time_over && score >= 100)   // Winning State
+        if(time_over && score >= pass_score)   // Winning State
         {
-            let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21));
-            label.center = CGPoint(x: screen_size.midX, y: screen_size.maxY * 0.32);
-            label.textAlignment = NSTextAlignment.center;
-            label.text = "Game Over";
-            label.textColor = UIColor.black;
-            label.font = UIFont.boldSystemFont(ofSize: 32.0);
-            hideAllSubviews();
-            self.view.addSubview(label);
+            go_menu();
         }
         else if(time_over)
         {
-            
+            go_menu();
         }
     }
-    
+
     @objc func countdown()
     {
         if(time_limit > 0){

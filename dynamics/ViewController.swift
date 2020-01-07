@@ -21,7 +21,6 @@ class ViewController: UIViewController, SubviewDelegate {
     var bird_array: [UIImageView]! = [];
 
     var bird_slots: [CGFloat]! = [];
-    var last_ball: UIImageView!;
     var score: UInt16 = 0;
     var time_limit: UInt8 = 20;
     var time_over: Bool = false;
@@ -31,7 +30,7 @@ class ViewController: UIViewController, SubviewDelegate {
 
     func floatEqual(a: CGFloat, b: CGFloat) -> Bool
     {
-        let epsilon: CGFloat = 0.027;
+        let epsilon: CGFloat = 0.02;
         return (abs(a-b) < epsilon);
     }
     
@@ -39,11 +38,10 @@ class ViewController: UIViewController, SubviewDelegate {
     {
         if (!time_over)
         {
-            let ball = UIImage(named: "ball.jpg");
+            let ball = UIImage(named: "cannonball.png");
             let ball_view = UIImageView(image: ball!);
             ball_view.frame = CGRect(x: x, y: y, width: 32, height: 32);
             view.addSubview(ball_view);
-            last_ball = ball_view;
             ball_array.append(ball_view);
 
             gravity_behavior.addItem(ball_view);
@@ -52,27 +50,40 @@ class ViewController: UIViewController, SubviewDelegate {
             dynamic_item_behavior.addLinearVelocity(CGPoint(x: vx * 15.2 + 20, y: vy * 10 - 50), for: ball_view);
         }
     }
-    
+
     func temp() -> Void {
-        if last_ball !== nil {
+        for (ball) in ball_array {
             for (bird) in bird_array {
-                if last_ball.frame.intersects(bird.frame) {
+                if ball.frame.intersects(bird.frame) {
                     for (slot) in bird_slots {
                         if(floatEqual(a: bird.frame.minY, b: slot)) {
-                            score += 10;
-                            bird.frame = CGRect(x: -1337, y: -8008, width: 48, height: 65);
+                            // Move the image view so the ball doesn't hit the bird twice if the ball is moving slowly.
+                            bird.frame = CGRect(x: -1337, y: -8008, width: 75, height: 65);
                             bird.removeFromSuperview();
+                            // Find the index of the
                             indices.append(bird_slots.firstIndex(of: slot)!);
                             indices.shuffle();
+                            score += 10;
+                            // Not efficient but remove the bird from the array so it's references are lost. Let garbage collection take care of it.
                             if let idx = bird_array.firstIndex(of: bird) {
                                 bird_array.remove(at: idx);
                             }
                             bird_count -= 1;
+                            break;
                         }
                     }
                 }
             }
         }
+    }
+    
+    func adjustBackground(filename: String){
+        let bg_img = UIImage(named: filename);
+        let bg_view = UIImageView(image: bg_img!);
+        bg_view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
+        bg_view.contentMode = UIView.ContentMode.scaleAspectFill;
+        self.view.addSubview(bg_view);
+        self.view.sendSubviewToBack(bg_view);
     }
 
     func updateBehaviors(){
@@ -118,6 +129,14 @@ class ViewController: UIViewController, SubviewDelegate {
         }
     }
 
+    func hideAllSubviews(){
+        self.view.subviews.forEach { $0.isHidden = true }
+    }
+    
+    func unhideAllSubviews(){
+        self.view.subviews.forEach { $0.isHidden = true }
+    }
+    
     func initBirdPos()
     {
         let height = screen_size.maxY;
@@ -134,17 +153,37 @@ class ViewController: UIViewController, SubviewDelegate {
     var indices: [Int]! = Array(0...4).shuffled();
     @objc func spawnBirds()
     {
-        if(!time_over){
+        if(!time_over)
+        {
             if bird_count < total_bird_count {
-                let bird = UIImage(named: "heron.png");
+                let bird = UIImage(named: "birb.png");
                 let bird_view = UIImageView(image: bird);
                 let last : Int = indices.removeLast();
-                bird_view.frame = CGRect(x: screen_size.maxX * 0.9 - bird!.size.width, y: bird_slots![last], width: 48, height: 65);
+                bird_view.frame = CGRect(x: screen_size.maxX * 0.9 - bird!.size.width, y: bird_slots![last], width: 75, height: 65);
                 bird_count += 1;
 
                 view.addSubview(bird_view);
                 bird_array.append(bird_view);
             }
+        }
+    }
+    
+    func gameOver()
+    {
+        if(time_over && score >= 100)   // Winning State
+        {
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21));
+            label.center = CGPoint(x: screen_size.midX, y: screen_size.maxY * 0.32);
+            label.textAlignment = NSTextAlignment.center;
+            label.text = "Game Over";
+            label.textColor = UIColor.black;
+            label.font = UIFont.boldSystemFont(ofSize: 32.0);
+            hideAllSubviews();
+            self.view.addSubview(label);
+        }
+        else if(time_over)
+        {
+            
         }
     }
     
@@ -159,6 +198,7 @@ class ViewController: UIViewController, SubviewDelegate {
         {
             time_over = true;
             // Do Game Over screen and display score in a different way
+            gameOver();
         }
         
     }
@@ -171,6 +211,8 @@ class ViewController: UIViewController, SubviewDelegate {
         shooter.center.x = shooter.bounds.midX * 3;
         shooter.center.y = screen_size.height / 2;
 
+        adjustBackground(filename: "xp_background.png");
+        
         let value = UIInterfaceOrientation.landscapeLeft.rawValue;
         UIDevice.current.setValue(value, forKey: "orientation");
 

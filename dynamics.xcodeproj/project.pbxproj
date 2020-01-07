@@ -12,6 +12,10 @@
 		EC29EF2B2382D987005B0729 /* menuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC29EF2A2382D987005B0729 /* menuController.swift */; };
 		EC29EF2D2382DC18005B0729 /* cat-bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EC29EF2C2382DC18005B0729 /* cat-bg.jpg */; };
 		EC2B6854238C15CD00AA7FB7 /* heron.png in Resources */ = {isa = PBXBuildFile; fileRef = EC2B6853238C15CD00AA7FB7 /* heron.png */; };
+		ECBDED3B23C4D16600E01749 /* xp_background.png in Resources */ = {isa = PBXBuildFile; fileRef = ECBDED3A23C4D16600E01749 /* xp_background.png */; };
+		ECBDED3D23C4D28A00E01749 /* crosshair.png in Resources */ = {isa = PBXBuildFile; fileRef = ECBDED3C23C4D28A00E01749 /* crosshair.png */; };
+		ECBDED3F23C4D37700E01749 /* cannonball.png in Resources */ = {isa = PBXBuildFile; fileRef = ECBDED3E23C4D37700E01749 /* cannonball.png */; };
+		ECBDED4123C4D5B800E01749 /* birb.png in Resources */ = {isa = PBXBuildFile; fileRef = ECBDED4023C4D5B800E01749 /* birb.png */; };
 		ECE0F2612375C88400056E51 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE0F2602375C88400056E51 /* AppDelegate.swift */; };
 		ECE0F2632375C88400056E51 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE0F2622375C88400056E51 /* SceneDelegate.swift */; };
 		ECE0F2652375C88400056E51 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE0F2642375C88400056E51 /* ViewController.swift */; };
@@ -46,6 +50,10 @@
 		EC29EF2A2382D987005B0729 /* menuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = menuController.swift; sourceTree = "<group>"; };
 		EC29EF2C2382DC18005B0729 /* cat-bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "cat-bg.jpg"; sourceTree = "<group>"; };
 		EC2B6853238C15CD00AA7FB7 /* heron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heron.png; sourceTree = "<group>"; };
+		ECBDED3A23C4D16600E01749 /* xp_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xp_background.png; sourceTree = "<group>"; };
+		ECBDED3C23C4D28A00E01749 /* crosshair.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crosshair.png; sourceTree = "<group>"; };
+		ECBDED3E23C4D37700E01749 /* cannonball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cannonball.png; sourceTree = "<group>"; };
+		ECBDED4023C4D5B800E01749 /* birb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = birb.png; sourceTree = "<group>"; };
 		ECE0F25D2375C88400056E51 /* dynamics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dynamics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECE0F2602375C88400056E51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ECE0F2622375C88400056E51 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -115,10 +123,14 @@
 				ECE0F2622375C88400056E51 /* SceneDelegate.swift */,
 				ECE0F3122375D40400056E51 /* dragImageView.swift */,
 				ECE0F2642375C88400056E51 /* ViewController.swift */,
+				ECBDED4023C4D5B800E01749 /* birb.png */,
 				EC29EF2A2382D987005B0729 /* menuController.swift */,
 				ECE0F2662375C88400056E51 /* Main.storyboard */,
+				ECBDED3E23C4D37700E01749 /* cannonball.png */,
+				ECBDED3C23C4D28A00E01749 /* crosshair.png */,
 				EC29EF222382CF5F005B0729 /* ball.jpg */,
 				EC2B6853238C15CD00AA7FB7 /* heron.png */,
+				ECBDED3A23C4D16600E01749 /* xp_background.png */,
 				EC29EF2C2382DC18005B0729 /* cat-bg.jpg */,
 				EC29EF232382CF5F005B0729 /* sun.jpg */,
 				ECE0F2692375C88500056E51 /* Assets.xcassets */,
@@ -251,8 +263,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECE0F26D2375C88500056E51 /* LaunchScreen.storyboard in Resources */,
+				ECBDED3F23C4D37700E01749 /* cannonball.png in Resources */,
+				ECBDED3D23C4D28A00E01749 /* crosshair.png in Resources */,
 				EC29EF2D2382DC18005B0729 /* cat-bg.jpg in Resources */,
 				ECE0F26A2375C88500056E51 /* Assets.xcassets in Resources */,
+				ECBDED3B23C4D16600E01749 /* xp_background.png in Resources */,
+				ECBDED4123C4D5B800E01749 /* birb.png in Resources */,
 				EC29EF252382CF5F005B0729 /* sun.jpg in Resources */,
 				EC29EF242382CF5F005B0729 /* ball.jpg in Resources */,
 				ECE0F2682375C88400056E51 /* Main.storyboard in Resources */,

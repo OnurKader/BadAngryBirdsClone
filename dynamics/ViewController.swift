@@ -12,6 +12,7 @@ class ViewController: UIViewController, SubviewDelegate {
 
     var dynamic_animator: UIDynamicAnimator!;
     var dynamic_item_behavior: UIDynamicItemBehavior!;
+    var obstacle_behavior: UIDynamicItemBehavior!;
     var gravity_behavior: UIGravityBehavior!;
     var collision_behavior: UICollisionBehavior!;
 
@@ -27,9 +28,8 @@ class ViewController: UIViewController, SubviewDelegate {
     var time_over: Bool = false;
     var game_over: Bool = false;
     var level: UInt8 = 1;
-    let pass_score: UInt8 = 100;
+    let pass_score: UInt8 = 80;
 
-    // TODO Get from screen size. Height / 78
     let total_bird_count = 5;
 
     func floatEqual(a: CGFloat, b: CGFloat) -> Bool
@@ -62,12 +62,14 @@ class ViewController: UIViewController, SubviewDelegate {
                     for (slot) in bird_slots {
                         if(floatEqual(a: bird.frame.minY, b: slot)) {
                             // Move the image view so the ball doesn't hit the bird twice if the ball is moving slowly.
+                            // TODO hardcoded bird height
                             bird.frame = CGRect(x: -1337, y: -8008, width: 75, height: 65);
                             bird.removeFromSuperview();
-                            // Find the index of the
+                            // Find the index of the right slot to get thr correct y position
                             indices.append(bird_slots.firstIndex(of: slot)!);
                             indices.shuffle();
                             score += 10;
+
                             // Not efficient but remove the bird from the array so it's references are lost. Let garbage collection take care of it.
                             if let idx = bird_array.firstIndex(of: bird) {
                                 bird_array.remove(at: idx);
@@ -95,6 +97,7 @@ class ViewController: UIViewController, SubviewDelegate {
         dynamic_item_behavior = UIDynamicItemBehavior(items: []);
         collision_behavior = UICollisionBehavior(items: []);
         gravity_behavior = UIGravityBehavior(items: []);
+        obstacle_behavior = UIDynamicItemBehavior(items: []);
 
         // Add Custom Boundaries
         collision_behavior.addBoundary(withIdentifier: "leftBoundary" as NSCopying, from: CGPoint(x: 0, y: 0), to: CGPoint(x: 0, y: UIScreen.main.bounds.height));
@@ -103,10 +106,13 @@ class ViewController: UIViewController, SubviewDelegate {
 
         collision_behavior.action = temp;
         dynamic_item_behavior.friction = 0.01;
+        dynamic_item_behavior.elasticity = 0.01;
+        obstacle_behavior.isAnchored = true;
         
         dynamic_animator.addBehavior(gravity_behavior);
         dynamic_animator.addBehavior(dynamic_item_behavior);
         dynamic_animator.addBehavior(collision_behavior);
+        dynamic_animator.addBehavior(obstacle_behavior);
     }
 
     func removeBall(ball: UIImageView)
@@ -128,8 +134,8 @@ class ViewController: UIViewController, SubviewDelegate {
             collision_behavior.removeItem(item);
             dynamic_item_behavior.removeItem(item);
             gravity_behavior.removeItem(item);
+            obstacle_behavior.removeItem(item);
         }
-
         arr.removeAll(keepingCapacity: false);
     }
 
@@ -188,6 +194,48 @@ class ViewController: UIViewController, SubviewDelegate {
     func getRGB(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor
     {
         return UIColor(red: red / 255.0, green: green / 255.0, blue: blue / 255.0, alpha: 1.0);
+    }
+    
+    var obstacles: [UIImageView] = [];
+    func handleLevels(level_count: UInt8)
+    {
+        switch level_count {
+        case 1:
+            return;
+        case 2:
+            // Spawn a crate inside
+            let crate_view = UIImageView(image: UIImage(named: "crate.png"));
+            crate_view.frame = CGRect(x: 0, y: 0, width: 150, height: 150);
+            crate_view.center = CGPoint(x: screen_size.midX, y: screen_size.midY);
+            self.view.addSubview(crate_view);
+            obstacle_behavior.addItem(crate_view);
+            collision_behavior.addItem(crate_view);
+            obstacles.append(crate_view);
+            break;
+        case 3:
+            removeFromPhysics(arr: &obstacles);
+            let crate1_view = UIImageView(image: UIImage(named: "crate.png"));
+            crate1_view.frame = CGRect(x: 0, y: 0, width: 92, height: 92);
+            crate1_view.center = CGPoint(x: screen_size.maxX * 0.6, y: screen_size.maxY * 0.32);
+
+            let crate2_view = UIImageView(image: UIImage(named: "crate.png"));
+            crate2_view.frame = CGRect(x: 0, y: 0, width: 92, height: 92);
+            crate2_view.center = CGPoint(x: screen_size.maxX * 0.6, y: screen_size.maxY * 0.69);
+
+            self.view.addSubview(crate1_view);
+            obstacle_behavior.addItem(crate1_view);
+            collision_behavior.addItem(crate1_view);
+            obstacles.append(crate1_view);
+
+            self.view.addSubview(crate2_view);
+            obstacle_behavior.addItem(crate2_view);
+            collision_behavior.addItem(crate2_view);
+            obstacles.append(crate2_view);
+            break;
+        default:
+            removeFromPhysics(arr: &obstacles);
+            break;
+        }
     }
 
     // Keep a reference to remove later
@@ -253,6 +301,7 @@ class ViewController: UIViewController, SubviewDelegate {
         time_limit = max_time_per_level;
         time_over = false;
         game_over = false;
+        handleLevels(level_count: level);
         unhideAllSubviews();
     }
 
@@ -300,9 +349,6 @@ class ViewController: UIViewController, SubviewDelegate {
     
         // Countdown and Score
         _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(countdown), userInfo: nil, repeats: true);
-
-        
-        // TODO Add a 20 second timer that stops the game and shows the end screen
     }
 
     override var shouldAutorotate: Bool {

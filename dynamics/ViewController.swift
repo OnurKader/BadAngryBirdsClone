@@ -9,7 +9,7 @@ class ViewController: UIViewController, SubviewDelegate {
     @IBOutlet weak var shooter: dragImageView!;
     @IBOutlet weak var score_label: UILabel!;
     @IBOutlet weak var time_label: UILabel!;
-    
+
     var dynamic_animator: UIDynamicAnimator!;
     var dynamic_item_behavior: UIDynamicItemBehavior!;
     var gravity_behavior: UIGravityBehavior!;
@@ -19,23 +19,25 @@ class ViewController: UIViewController, SubviewDelegate {
 
     var ball_array: [UIImageView]! = [];
     var bird_array: [UIImageView]! = [];
-
     var bird_slots: [CGFloat]! = [];
+
     var score: UInt16 = 0;
-    var time_limit: UInt8 = 5;
+    let max_time_per_level: UInt8 = 20;
+    var time_limit: UInt8 = 0;
     var time_over: Bool = false;
-    
-    let pass_score: UInt8 = 10;
+    var game_over: Bool = false;
+    var level: UInt8 = 1;
+    let pass_score: UInt8 = 100;
 
     // TODO Get from screen size. Height / 78
     let total_bird_count = 5;
 
     func floatEqual(a: CGFloat, b: CGFloat) -> Bool
     {
-        let epsilon: CGFloat = 0.02;
+        let epsilon: CGFloat = 0.01;
         return (abs(a-b) < epsilon);
     }
-    
+
     func spawnBall(x: CGFloat, y: CGFloat, vx: CGFloat, vy: CGFloat)
     {
         if (!time_over)
@@ -78,7 +80,7 @@ class ViewController: UIViewController, SubviewDelegate {
             }
         }
     }
-    
+
     func adjustBackground(filename: String){
         let bg_img = UIImage(named: filename);
         let bg_view = UIImageView(image: bg_img!);
@@ -118,6 +120,19 @@ class ViewController: UIViewController, SubviewDelegate {
        }
     }
 
+    func removeFromPhysics(arr: inout [UIImageView])
+    {
+        for (item) in arr
+        {
+            item.removeFromSuperview();
+            collision_behavior.removeItem(item);
+            dynamic_item_behavior.removeItem(item);
+            gravity_behavior.removeItem(item);
+        }
+
+        arr.removeAll(keepingCapacity: false);
+    }
+
     @objc func ballEdge()
     {
         if(!time_over){
@@ -135,11 +150,11 @@ class ViewController: UIViewController, SubviewDelegate {
     func hideAllSubviews(){
         self.view.subviews.forEach { $0.isHidden = true }
     }
-    
+
     func unhideAllSubviews(){
-        self.view.subviews.forEach { $0.isHidden = true }
+        self.view.subviews.forEach { $0.isHidden = false }
     }
-    
+
     func initBirdPos()
     {
         let height = screen_size.maxY;
@@ -151,7 +166,6 @@ class ViewController: UIViewController, SubviewDelegate {
         }
     }
 
-    // TODO Find a way to reset the arrays, to spawn new birds when one dies
     var bird_count = 0;
     var indices: [Int]! = Array(0...4).shuffled();
     @objc func spawnBirds()
@@ -176,45 +190,80 @@ class ViewController: UIViewController, SubviewDelegate {
         return UIColor(red: red / 255.0, green: green / 255.0, blue: blue / 255.0, alpha: 1.0);
     }
 
-    func go_menu()
+    // Keep a reference to remove later
+    let go_label = UILabel(frame: CGRect(x: 0, y: 0, width: 256, height: 36));
+    let go_score = UILabel(frame: CGRect(x: 0, y: 0, width: 256, height: 24));
+    let go_button = UIButton(frame: CGRect(x: 0, y: 0, width: 128, height: 42));
+
+    func go_menu(end_state: Bool)
     {
-        let game_over = UILabel(frame: CGRect(x: 0, y: 0, width: 256, height: 36));
-        game_over.center = CGPoint(x: screen_size.midX, y: screen_size.maxY * 0.2718281828);
-        game_over.textAlignment = NSTextAlignment.center;
-        game_over.text = "Game Over";
-        game_over.textColor = UIColor.black;
-        game_over.font = UIFont.boldSystemFont(ofSize: 42);
-        let go_score = UILabel(frame: CGRect(x: 0, y: 0, width: 256, height: 24));
-        go_score.center = CGPoint(x: screen_size.midX, y: screen_size.maxY * 0.2718281828 + 54);
+        go_label.center = CGPoint(x: screen_size.midX, y: screen_size.maxY * 0.2718281828);
+        go_label.textAlignment = NSTextAlignment.center;
+        go_label.text = end_state ? "YOU WIN!" : "YOU LOST!";
+        go_label.textColor = UIColor.black;
+        go_label.font = UIFont.boldSystemFont(ofSize: 42);
+
+        go_score.center = CGPoint(x: screen_size.midX, y: screen_size.maxY * 0.2718281828 + 56);
         go_score.textAlignment = NSTextAlignment.center;
         go_score.text = "Your Score: " + String(score);
         go_score.textColor = getRGB(red: 18, green: 156, blue: 36);
         go_score.font = UIFont.boldSystemFont(ofSize: 25);
+
+        go_button.center = CGPoint(x: screen_size.midX, y: screen_size.maxY * 0.666);
+        go_button.setTitle(end_state ? "Next Level" : "Play Again?", for: .normal);
+        go_button.backgroundColor = end_state ? .green : .red;
+        go_button.addTarget(self, action: #selector(gameOverButton), for: .touchUpInside);
+
         hideAllSubviews();
-        self.view.addSubview(game_over);
+        self.view.addSubview(go_label);
         self.view.addSubview(go_score);
+        self.view.addSubview(go_button);
     }
 
     func gameOver()
     {
-        if(time_over && score >= pass_score)   // Winning State
+        if(!game_over && time_over && score >= pass_score)   // Winning State
         {
-            go_menu();
+            level += 1;
+            go_menu(end_state: true);
+            removeFromPhysics(arr: &ball_array);
+            removeFromPhysics(arr: &bird_array);
+            bird_count = 0;
+            indices = Array(0...4).shuffled();
+            game_over = true;
         }
-        else if(time_over)
+        else if(!game_over && time_over)  // Losing State
         {
-            go_menu();
+            level = 1;
+            go_menu(end_state: false);
+            removeFromPhysics(arr: &ball_array);
+            removeFromPhysics(arr: &bird_array);
+            bird_count = 0;
+            indices = Array(0...4).shuffled();
+            game_over = true;
         }
+    }
+
+    @objc func gameOverButton(sender: UIButton!)
+    {
+        go_label.removeFromSuperview();
+        go_score.removeFromSuperview();
+        go_button.removeFromSuperview();
+        score = 0;
+        time_limit = max_time_per_level;
+        time_over = false;
+        game_over = false;
+        unhideAllSubviews();
     }
 
     @objc func countdown()
     {
-        if(time_limit > 0){
+        if(!time_over && time_limit > 0){
             time_limit -= 1;
             score_label.text = "Score: " + String(score);
             time_label.text = "Time Left: " + String(time_limit);
         }
-        else
+        else if(!time_over)
         {
             time_over = true;
             // Do Game Over screen and display score in a different way
@@ -232,6 +281,7 @@ class ViewController: UIViewController, SubviewDelegate {
         shooter.center.y = screen_size.height / 2;
 
         adjustBackground(filename: "xp_background.png");
+        time_limit = max_time_per_level;
         
         let value = UIInterfaceOrientation.landscapeLeft.rawValue;
         UIDevice.current.setValue(value, forKey: "orientation");

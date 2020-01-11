@@ -201,7 +201,8 @@ class ViewController: UIViewController, SubviewDelegate {
     {
         switch level_count {
         case 1:
-            return;
+            removeFromPhysics(arr: &obstacles);
+            break;
         case 2:
             // Spawn a crate inside
             let crate_view = UIImageView(image: UIImage(named: "crate.png"));

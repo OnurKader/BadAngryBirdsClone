@@ -195,7 +195,7 @@ class ViewController: UIViewController, SubviewDelegate {
     {
         return UIColor(red: red / 255.0, green: green / 255.0, blue: blue / 255.0, alpha: 1.0);
     }
-    
+
     var obstacles: [UIImageView] = [];
     func handleLevels(level_count: UInt8)
     {
